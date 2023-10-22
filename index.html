@@ -9,40 +9,9 @@
   <body>
     <div class="container">
       <ul class="comments" id="list">
-        <li class="comment">
-          <div class="comment-header">
-            <div>Глеб Фокин</div>
-            <div>12.02.22 12:18</div>
-          </div>
-          <div class="comment-body">
-            <div class="comment-text">
-              Это будет первый комментарий на этой странице
-            </div>
-          </div>
-          <div class="comment-footer">
-            <div class="likes">
-              <span class="likes-counter">3</span>
-              <button class="like-button"></button>
-            </div>
-          </div>
-        </li>
-        <li class="comment">
-          <div class="comment-header">
-            <div>Варвара Н.</div>
-            <div>13.02.22 19:22</div>
-          </div>
-          <div class="comment-body">
-            <div class="comment-text">
-              Мне нравится как оформлена эта страница! ❤
-            </div>
-          </div>
-          <div class="comment-footer">
-            <div class="likes">
-              <span class="likes-counter">75</span>
-              <button class="like-button -active-like"></button>
-            </div>
-          </div>
-        </li>
+ 
+      /* Список рендерится из JS */
+
       </ul>
       <div class="add-form">
         <input
@@ -71,7 +40,83 @@
     const listElement = document.getElementById("list");
     const nameInputElement = document.getElementById("name-input");
     const textInputElement = document.getElementById("text-input");
+    
+    const commentElements = document.querySelectorAll(".comment");
 
+    const comments = [
+      {
+        name: 'Глеб Фокин',
+        date: '12.02.22 12:18',
+        text: 'Это будет первый комментарий на этой странице',
+        like: 3,
+        isLike: false,
+        
+      },
+      {
+        name: 'Варвара Н.',
+        date: '13.02.22 19:22',
+        text: 'Мне нравится как оформлена эта страница! ❤',
+        like: 75,
+        isLike: false,
+        
+      }
+    ];
+
+  const initLikeButtons = () => {
+  const likeButtons = document.querySelectorAll('.like-button');
+  for (const likeButton of likeButtons) {
+    likeButton.addEventListener('click', () => {
+      const index = likeButton.dataset.index;
+      if (comments[index].isLike) {
+        comments[index].isLike = true;
+        comments[index].like += 1;
+      } else {
+        comments[index].isLike = false;
+        comments[index].like -= 1;
+      }
+      renderComments();
+    });
+  }
+}
+    
+    const renderComments = () => {
+      const commentsHtml = comments.map((comment, index) => {
+        return 
+        `<li class="comment">
+        <div class="comment-header">
+            <div>${comment.name}</div>
+            <div>${comment.date}</div>
+          </div>
+          <div class="comment-body">
+            <div class="comment-text">
+              ${comment.text}
+            </div>
+          </div>
+          <div class="comment-footer">
+            <div class="likes">
+              <span class="likes-counter">${comment.like}</span>
+              <button data-index='${index}' class="like-button" ${comment.color}></button>
+            </div>
+          </div>
+        </li>`
+      }).join('');
+
+      listElement.innerHTML = commentsHtml;
+      initLikeButtons();
+    }
+    renderComments();
+
+
+    const initEventListeners = () => {
+      const commentElements = document.querySelectorAll(".comment");
+      for(const commentElement of commentElements) {
+          commentElement.addEventListener('click', () => {
+          console.log(commentElement.innerHTML);
+        })
+      }
+    }
+    initEventListeners();
+     
     buttonElement.disabled = true;
     nameInputElement.addEventListener('input', () => {
       if ((nameInputElement.value === '')||(textInputElement.value === '')){
@@ -126,30 +171,22 @@
     
     let userDate = day + "." + month + "." + year + " " + hour + ":" + minute; 
 
-      const oldListHTML = listElement.innerHTML;
-      listElement.innerHTML = oldListHTML +
-      ` <li class="comment">
-        <div class="comment-header">
-            <div>${nameInputElement.value}</div>
-            <div>${userDate}</div>
-          </div>
-          <div class="comment-body">
-            <div class="comment-text">
-              ${textInputElement.value}
-            </div>
-          </div>
-          <div class="comment-footer">
-            <div class="likes">
-              <span class="likes-counter">0</span>
-              <button class="like-button"></button>
-            </div>
-          </div>
-        </li>`
+    comments.push({
+      name: nameInputElement.value,
+      date: userDate,
+      text: textInputElement.value,
+      like: "0"
+    });
+
+    renderComments();  
+    initEventListeners();
+    initLikeButtons();
+
         nameInputElement.value = "";
         textInputElement.value = "";
         buttonElement.disabled = true;
     });
-    // Код писать здесь
+    
     console.log("It works!");
   </script>
 </html>
