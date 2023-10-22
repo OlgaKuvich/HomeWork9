@@ -68,11 +68,11 @@
     likeButton.addEventListener('click', () => {
       const index = likeButton.dataset.index;
       if (comments[index].isLike) {
-        comments[index].isLike = true;
-        comments[index].like += 1;
-      } else {
         comments[index].isLike = false;
         comments[index].like -= 1;
+      } else {
+        comments[index].isLike = true;
+        comments[index].like += 1;
       }
       renderComments();
     });
@@ -81,8 +81,7 @@
     
     const renderComments = () => {
       const commentsHtml = comments.map((comment, index) => {
-        return 
-        `<li class="comment">
+        return `<li class="comment">
         <div class="comment-header">
             <div>${comment.name}</div>
             <div>${comment.date}</div>
