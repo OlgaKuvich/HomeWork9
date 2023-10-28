@@ -69,17 +69,17 @@
             //console.log(1);
             const index = userComment.dataset.index;
            // console.log(index);
-            textInputElement.value = `> ${comment[index].text} \n ${comment[index].name} `;
+            textInputElement.value = `> ${comments[index].text} \n ${comments[index].name} `;
           });
       };
     }
-    
-      
+       
   const initLikeButtons = () => {
   const likeButtons = document.querySelectorAll('.like-button');
   for (const likeButton of likeButtons) {
     likeButton.addEventListener('click', (event) => {
-     //event.stopPropogation();
+      console.log(event);
+      event.stopPropagation();
       const index = likeButton.dataset.index;
       if (comments[index].isLike) {
         comments[index].isLike = false;
