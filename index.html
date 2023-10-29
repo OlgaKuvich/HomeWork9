@@ -43,8 +43,37 @@
     
     const commentElements = document.querySelectorAll(".comment");
 
-    const comments = [
-      {
+    const getApiComments = () => {
+      const fetchPromise = fetch("https://wedev-api.sky.pro/api/v1/:olga-kuvichinskaya/comments", {
+      method: "GET",
+      });
+
+      fetchPromise.then((response) => {
+        const joinPromise = response.json();
+          joinPromise.then((responseData) => {
+         // console.log(responseData);
+
+         const commentsArr = responseData.comments.map((comment) => {
+          return {
+            name: comment.author.name,
+            date: new Date(comment.date).toLocaleString(),
+            text: comment.text,
+            like: 0,
+            isLike: comment.like,
+          
+          };
+
+        });
+        comments = commentsArr;
+        renderComments();
+        });
+      });
+    }
+    getApiComments();
+
+    let comments = [];
+
+  /*  {
         name: 'Глеб Фокин',
         date: '12.02.22 12:18',
         text: 'Это будет первый комментарий на этой странице',
@@ -59,8 +88,7 @@
         like: 75,
         isLike: false,
         
-      }
-    ];
+      }*/
 
     const answerUserComment = () => {
       const userComments = document.querySelectorAll('.comment');
@@ -185,7 +213,7 @@
     
     let userDate = day + "." + month + "." + year + " " + hour + ":" + minute; 
 
-    comments.push({
+   /* comments.push({
       name: nameInputElement.value
       .replaceAll('<', '&lt;')
       .replaceAll('>', '&gt;'),
@@ -194,19 +222,35 @@
       .replaceAll('<', '&lt;')
       .replaceAll('>', '&gt;'),
       like: "0"
+    });*/
+    
+    const commentsPromise = fetch("https://wedev-api.sky.pro/api/v1/:olga-kuvichinskaya/comments", {
+      method: "POST",
+      body: JSON.stringify({
+        text: textInputElement.value
+        .replaceAll('<', '&lt;')
+        .replaceAll('>', '&gt;'),
+        name: nameInputElement.value
+        .replaceAll('<', '&lt;')
+        .replaceAll('>', '&gt;'),
+      }),
+    });
+    commentsPromise.then((response) => {
+      getApiComments();
     });
 
-    renderComments();  
+    renderComments();
     initEventListeners();
     initLikeButtons();
     answerUserComment();
    
-
         nameInputElement.value = "";
         textInputElement.value = "";
         buttonElement.disabled = true;
+
     });
-    
+   
+      
     console.log("It works!");
   </script>
 </html>
