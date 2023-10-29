@@ -62,10 +62,24 @@
       }
     ];
 
+    const answerUserComment = () => {
+      const userComments = document.querySelectorAll('.comment');
+      for (const userComment of userComments) {
+          userComment.addEventListener("click", () => {
+            //console.log(1);
+            const index = userComment.dataset.index;
+           // console.log(index);
+            textInputElement.value = `> ${comments[index].text} \n ${comments[index].name} `;
+          });
+      };
+    }
+       
   const initLikeButtons = () => {
   const likeButtons = document.querySelectorAll('.like-button');
   for (const likeButton of likeButtons) {
-    likeButton.addEventListener('click', () => {
+    likeButton.addEventListener('click', (event) => {
+      console.log(event);
+      event.stopPropagation();
       const index = likeButton.dataset.index;
       if (comments[index].isLike) {
         comments[index].isLike = false;
@@ -81,20 +95,20 @@
     
     const renderComments = () => {
       const commentsHtml = comments.map((comment, index) => {
-        return `<li class="comment">
+        return `<li data-index='${index}' class="comment">
         <div class="comment-header">
-            <div>${comment.name}</div>
+            <div class = "comment-name">${comment.name}</div>
             <div>${comment.date}</div>
           </div>
           <div class="comment-body">
             <div class="comment-text">
-              ${comment.text}
+            ${comment.text.replaceAll("BEGIN_QUOTE", "<div class='quote'>")}
             </div>
           </div>
           <div class="comment-footer">
             <div class="likes">
               <span class="likes-counter">${comment.like}</span>
-              <button data-index='${index}' class="like-button" ${comment.color}></button>
+              <button data-index='${index}' class="like-button ${comment.isLike ? ' -active-like' : ''}"></button>
             </div>
           </div>
         </li>`
@@ -102,6 +116,7 @@
 
       listElement.innerHTML = commentsHtml;
       initLikeButtons();
+      answerUserComment();
     }
     renderComments();
 
@@ -171,15 +186,21 @@
     let userDate = day + "." + month + "." + year + " " + hour + ":" + minute; 
 
     comments.push({
-      name: nameInputElement.value,
+      name: nameInputElement.value
+      .replaceAll('<', '&lt;')
+      .replaceAll('>', '&gt;'),
       date: userDate,
-      text: textInputElement.value,
+      text: textInputElement.value
+      .replaceAll('<', '&lt;')
+      .replaceAll('>', '&gt;'),
       like: "0"
     });
 
     renderComments();  
     initEventListeners();
     initLikeButtons();
+    answerUserComment();
+   
 
         nameInputElement.value = "";
         textInputElement.value = "";
