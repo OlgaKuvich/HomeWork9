@@ -13,7 +13,8 @@
       /* Список рендерится из JS */
 
       </ul>
-      <div class="add-form">
+      <div id="loading"></div>
+      <div class="add-form" id="addForm">
         <input
           id="name-input"
           type="text"
@@ -36,23 +37,25 @@
 
   <script>
     "use strict";
+
     const buttonElement = document.getElementById("add-button");
     const listElement = document.getElementById("list");
     const nameInputElement = document.getElementById("name-input");
     const textInputElement = document.getElementById("text-input");
-    
+    const loaderElement = document.getElementById(".loading");
     const commentElements = document.querySelectorAll(".comment");
-
-    const getApiComments = () => {
-      const fetchPromise = fetch("https://wedev-api.sky.pro/api/v1/:olga-kuvichinskaya/comments", {
+    
+    
+      loaderElement.textContent = "Подождите пожалуйста, комментарии загружаются...";
+      const getApiComments = () => {
+      return fetch("https://wedev-api.sky.pro/api/v1/:olga-kuvichinskaya/comments", {
       method: "GET",
-      });
-
-      fetchPromise.then((response) => {
-        const joinPromise = response.json();
-          joinPromise.then((responseData) => {
-         // console.log(responseData);
-
+      })
+      .then((response) => {
+        return response.json();
+      })
+        .then((responseData) => {
+         
          const commentsArr = responseData.comments.map((comment) => {
           return {
             name: comment.author.name,
@@ -60,35 +63,20 @@
             text: comment.text,
             like: 0,
             isLike: comment.like,
-          
           };
-
         });
         comments = commentsArr;
-        renderComments();
-        });
-      });
-    }
+        renderComments()
+      })
+        .then((response) => {
+          loaderElement.textContent = "";
+          loaderElement.classList.remove("margin");
+		  });
+      };
+
     getApiComments();
 
     let comments = [];
-
-  /*  {
-        name: 'Глеб Фокин',
-        date: '12.02.22 12:18',
-        text: 'Это будет первый комментарий на этой странице',
-        like: 3,
-        isLike: false,
-        
-      },
-      {
-        name: 'Варвара Н.',
-        date: '13.02.22 19:22',
-        text: 'Мне нравится как оформлена эта страница! ❤',
-        like: 75,
-        isLike: false,
-        
-      }*/
 
     const answerUserComment = () => {
       const userComments = document.querySelectorAll('.comment');
@@ -120,6 +108,14 @@
     });
   }
 }
+
+function delay(interval = 300) {
+      return new Promise((resolve) => {
+        setTimeout(() => {
+          resolve();
+        }, interval);
+      });
+}
     
     const renderComments = () => {
       const commentsHtml = comments.map((comment, index) => {
@@ -140,7 +136,8 @@
             </div>
           </div>
         </li>`
-      }).join('');
+      })
+      .join('');
 
       listElement.innerHTML = commentsHtml;
       initLikeButtons();
@@ -212,17 +209,6 @@
     }
     
     let userDate = day + "." + month + "." + year + " " + hour + ":" + minute; 
-
-   /* comments.push({
-      name: nameInputElement.value
-      .replaceAll('<', '&lt;')
-      .replaceAll('>', '&gt;'),
-      date: userDate,
-      text: textInputElement.value
-      .replaceAll('<', '&lt;')
-      .replaceAll('>', '&gt;'),
-      like: "0"
-    });*/
     
     const commentsPromise = fetch("https://wedev-api.sky.pro/api/v1/:olga-kuvichinskaya/comments", {
       method: "POST",
@@ -238,7 +224,7 @@
     commentsPromise.then((response) => {
       getApiComments();
     });
-
+   
     renderComments();
     initEventListeners();
     initLikeButtons();
@@ -249,7 +235,8 @@
         buttonElement.disabled = true;
 
     });
-   
+  
+  
       
     console.log("It works!");
   </script>
