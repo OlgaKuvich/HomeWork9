@@ -42,11 +42,12 @@
     const listElement = document.getElementById("list");
     const nameInputElement = document.getElementById("name-input");
     const textInputElement = document.getElementById("text-input");
-    const loaderElement = document.getElementById(".loading");
+    const loaderElement = document.getElementById("loading");
     const commentElements = document.querySelectorAll(".comment");
     
     
-      loaderElement.textContent = "Подождите пожалуйста, комментарии загружаются...";
+     loaderElement.textContent = "Подождите пожалуйста, комментарии загружаются...";
+  
       const getApiComments = () => {
       return fetch("https://wedev-api.sky.pro/api/v1/:olga-kuvichinskaya/comments", {
       method: "GET",
@@ -89,6 +90,14 @@
           });
       };
     }
+
+    function delay(interval = 300) {
+      return new Promise((resolve) => {
+        setTimeout(() => {
+          resolve();
+        }, interval);
+      });
+    }
        
   const initLikeButtons = () => {
   const likeButtons = document.querySelectorAll('.like-button');
@@ -96,26 +105,23 @@
     likeButton.addEventListener('click', (event) => {
       console.log(event);
       event.stopPropagation();
-      const index = likeButton.dataset.index;
-      if (comments[index].isLike) {
-        comments[index].isLike = false;
-        comments[index].like -= 1;
-      } else {
-        comments[index].isLike = true;
-        comments[index].like += 1;
-      }
-      renderComments();
-    });
+      likeButton.classList.add("loadingLike");
+				delay(2000)
+					.then(() => {
+            likeButton.classList.remove("loadingLike");
+            const index = likeButton.dataset.index;
+            if (comments[index].isLike) {
+              comments[index].isLike = false;
+              comments[index].like -= 1;
+            } else {
+              comments[index].isLike = true;
+              comments[index].like += 1;
+            }
+            renderComments();
+          });
+          });
+    };
   }
-}
-
-function delay(interval = 300) {
-      return new Promise((resolve) => {
-        setTimeout(() => {
-          resolve();
-        }, interval);
-      });
-}
     
     const renderComments = () => {
       const commentsHtml = comments.map((comment, index) => {
@@ -136,8 +142,7 @@ function delay(interval = 300) {
             </div>
           </div>
         </li>`
-      })
-      .join('');
+      }).join('');
 
       listElement.innerHTML = commentsHtml;
       initLikeButtons();
@@ -210,6 +215,11 @@ function delay(interval = 300) {
     
     let userDate = day + "." + month + "." + year + " " + hour + ":" + minute; 
     
+   
+      loaderElement.textContent = "Комментарий добавляется...";
+      buttonElement.disabled = true;
+
+
     const commentsPromise = fetch("https://wedev-api.sky.pro/api/v1/:olga-kuvichinskaya/comments", {
       method: "POST",
       body: JSON.stringify({
@@ -222,6 +232,7 @@ function delay(interval = 300) {
       }),
     });
     commentsPromise.then((response) => {
+      buttonElement.disabled = false;
       getApiComments();
     });
    
