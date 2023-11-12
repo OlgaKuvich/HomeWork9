@@ -229,25 +229,48 @@
         name: nameInputElement.value
         .replaceAll('<', '&lt;')
         .replaceAll('>', '&gt;'),
+        forceError: true,
       }),
-    });
-    commentsPromise.then((response) => {
-      buttonElement.disabled = false;
-      getApiComments();
-    });
-   
+    })
+      .then((response) => {
+      console.log(response);
+        if (response.status === 500) {
+          loaderElement.textContent = ""; 
+          throw new Error("Сервер упал");
+        } 
+          if (response.status === 400) {
+            loaderElement.textContent = ""; 
+            throw new Error("Неверный запрос");
+          }
+          return response.json();
+      })
+      .then((responseData) => {
+        nameInputElement.value = '';
+        textareaInputElement.value = '';
+        buttonElement.disabled = true;
+        return getApiComments();
+        console.log(responseData);
+      })
+      .catch((error) => {
+        if (error.message === "Ошибка сервера") {
+            alert("Сервер сломался, попробуй позже");
+          }
+
+          if (error.message === "Неверный запрос") {
+            alert("Имя и комментарий должны быть не короче 3-х символов");
+          } 
+      })
+        .finally(() => {
+				buttonElement.disabled = false;
+			})
+      });
+    
+     
     renderComments();
     initEventListeners();
     initLikeButtons();
     answerUserComment();
    
-        nameInputElement.value = "";
-        textInputElement.value = "";
-        buttonElement.disabled = true;
-
-    });
-  
-       
     console.log("It works!");
   </script>
 </html>
