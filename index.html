@@ -236,7 +236,7 @@
       console.log(response);
         if (response.status === 500) {
           loaderElement.textContent = ""; 
-          throw new Error("Сервер упал");
+          throw new Error("Ошибка сервера");
         } 
           if (response.status === 400) {
             loaderElement.textContent = ""; 
@@ -246,7 +246,7 @@
       })
       .then((responseData) => {
         nameInputElement.value = '';
-        textareaInputElement.value = '';
+        textInputElement.value = '';
         buttonElement.disabled = true;
         return getApiComments();
         console.log(responseData);
@@ -259,9 +259,16 @@
           if (error.message === "Неверный запрос") {
             alert("Имя и комментарий должны быть не короче 3-х символов");
           } 
-      })
+          
+          if (error === "Failed to fetch") {
+            loaderElement.textContent = "";
+					  alert("Кажется, у вас сломался интернет, попробуйте позже");
+            console.warn(error);
+				} 
+			})   
         .finally(() => {
 				buttonElement.disabled = false;
+        
 			})
       });
     
