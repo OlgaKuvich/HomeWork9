@@ -260,7 +260,7 @@
             alert("Имя и комментарий должны быть не короче 3-х символов");
           } 
           
-          if (error === "Failed to fetch") {
+          if (error === "Ошибка запроса") {
             loaderElement.textContent = "";
 					  alert("Кажется, у вас сломался интернет, попробуйте позже");
             console.warn(error);
