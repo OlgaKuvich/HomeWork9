@@ -1,6 +1,6 @@
-const listElement = document.getElementById("list");
+//const listElement = document.getElementById("list");
 
-export const renderForm = (comments,listElement) => {
+export const renderForm = (comments, listElement) => {
     const renderComments = () => {
         return (listElement.innerHTML = comments
             .map((comment, index) => {
@@ -25,6 +25,7 @@ export const renderForm = (comments,listElement) => {
             .join(''));
     }
       renderComments();
+      initLikeButtons(comments, renderComments);
 }
 
 function delay(interval = 300) {
@@ -33,9 +34,9 @@ function delay(interval = 300) {
         resolve();
       }, interval);
     });
-  }
+}
      
-export const initLikeButtons = () => {
+export const initLikeButtons = (comments, renderComments) => {
   const likeButtons = document.querySelectorAll('.like-button');
   for (const likeButton of likeButtons) {
     likeButton.addEventListener('click', (event) => {
@@ -54,10 +55,8 @@ export const initLikeButtons = () => {
                         comments[index].like += 1;
                     }
             renderComments();
-            initLikeButtons();
+            initLikeButtons(comments, renderComments);
             });
         });
   };
-  }
-  //renderComments();
-  initLikeButtons();
+} 

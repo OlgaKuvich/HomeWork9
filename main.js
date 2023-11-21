@@ -1,7 +1,6 @@
 import { getApi } from "./api.js";
 import { postApi } from "./api.js"; 
 import { renderForm } from "./render.js";
-import { initLikeButtons } from "./render.js";
 
 const buttonElement = document.getElementById("add-button");
 const listElement = document.getElementById("list");
@@ -11,11 +10,11 @@ const loaderElement = document.getElementById("loading");
 const commentElements = document.querySelectorAll(".comment");
 
 
- loaderElement.textContent = "Подождите пожалуйста, комментарии загружаются...";
+loaderElement.textContent = "Подождите пожалуйста, комментарии загружаются...";
 
   const getApiComments = () => {
  
-    getApi()
+  getApi()
         .then((responseData) => {
             const commentsArr = responseData.comments.map((comment) => {
             return {
@@ -32,36 +31,24 @@ const commentElements = document.querySelectorAll(".comment");
     .then((response) => {
       loaderElement.textContent = "";
       loaderElement.classList.remove("margin");
-      });
-  };
+    });
+};
 
 getApiComments();
 
-
 let comments = [];
 
-const answerUserComment = () => {
+const answerUserComment = ({ comments }) => {
   const userComments = document.querySelectorAll('.comment');
   for (const userComment of userComments) {
       userComment.addEventListener("click", () => {
-        //console.log(1);
         const index = userComment.dataset.index;
-       // console.log(index);
         textInputElement.value = `> ${comments[index].text} \n ${comments[index].name} `;
+        console.log(comments[index]);
       });
   };
 }
 
-
-const initEventListeners = () => {
-  const commentElements = document.querySelectorAll(".comment");
-  for(const commentElement of commentElements) {
-      commentElement.addEventListener('click', () => {
-      console.log(commentElement.innerHTML);
-    })
-  }
-}
-initEventListeners();
  
 buttonElement.disabled = true;
 nameInputElement.addEventListener('input', () => {
@@ -95,55 +82,32 @@ buttonElement.addEventListener("click", () => {
   return;
 };
 
-let myDate = new Date(); 
-let day = myDate.getDate();
-let month = myDate.getMonth();
-let year = myDate.getFullYear(); 
-let hour = myDate.getHours(); 
-let minute = myDate.getMinutes(); 
 
-if (day < 10) { 
-    day = "0" + day; 
-}
-if (month < 10) { 
-    month = "0" + month; 
-}
-if (hour < 10) { 
-    hour = "0" + hour; 
-}
-if (minute < 10) { 
-    minute = "0" + minute; 
-}
+loaderElement.textContent = "Комментарий добавляется...";
+buttonElement.disabled = true;
 
-let userDate = day + "." + month + "." + year + " " + hour + ":" + minute; 
-
-
-  loaderElement.textContent = "Комментарий добавляется...";
-  buttonElement.disabled = true;
-
-  postApi(textInputElement, nameInputElement).then((response) => {
-  console.log(response);
-    if (response.status === 500) {
+postApi(textInputElement, nameInputElement).then((response) => {
+console.log(response);
+  if (response.status === 500) {
+    loaderElement.textContent = ""; 
+    throw new Error("Ошибка сервера");
+  } 
+    if (response.status === 400) {
       loaderElement.textContent = ""; 
-      throw new Error("Ошибка сервера");
-    } 
-      if (response.status === 400) {
-        loaderElement.textContent = ""; 
-        throw new Error("Неверный запрос");
-      }
-      return response.json();
+      throw new Error("Неверный запрос");
+    }
+    return response.json();
   })
   .then((responseData) => {
     nameInputElement.value = '';
     textInputElement.value = '';
     buttonElement.disabled = true;
     return getApiComments();
-    //console.log(responseData);
   })
   .catch((error) => {
     if (error.message === "Ошибка сервера") {
-        alert("Сервер сломался, попробуй позже");
-      }
+      alert("Сервер сломался, попробуй позже");
+    }
 
       if (error.message === "Неверный запрос") {
         alert("Имя и комментарий должны быть не короче 3-х символов");
@@ -151,20 +115,16 @@ let userDate = day + "." + month + "." + year + " " + hour + ":" + minute;
       
       if (error.message === "Failed to fetch") {
         loaderElement.textContent = "";
-                  alert("Кажется, у вас сломался интернет, попробуйте позже");
-        console.warn(error);
-            } 
-        })   
+          alert("Кажется, у вас сломался интернет, попробуйте позже");
+          console.warn(error);
+        } 
+      })   
     .finally(() => {
-            buttonElement.disabled = false;
-    
-        })
+        buttonElement.disabled = false;
+    })
   });
-
  
 renderForm(comments,listElement);
-initEventListeners();
-initLikeButtons();
-answerUserComment();
+answerUserComment(comments);
 
 console.log("It works!");
