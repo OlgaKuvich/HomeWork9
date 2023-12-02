@@ -1,6 +1,7 @@
-//const listElement = document.getElementById("list");
+const listElement = document.getElementById("list");
+const commentElements = document.querySelectorAll(".comment");
 
-export const renderForm = (comments, listElement) => {
+export const renderForm = (comments, listElement, state) => {
     const renderComments = () => {
         return (listElement.innerHTML = comments
             .map((comment, index) => {
@@ -23,6 +24,7 @@ export const renderForm = (comments, listElement) => {
               </li>`
             })
             .join(''));
+            listElement.innerHTML = state?"":commentsHtml;
     }
       renderComments();
       initLikeButtons(comments, renderComments);

@@ -1,6 +1,7 @@
 import { getApi } from "./api.js";
 import { postApi } from "./api.js"; 
 import { renderForm } from "./render.js";
+import { renderLogin } from "./login.js";
 
 const buttonElement = document.getElementById("add-button");
 const listElement = document.getElementById("list");
@@ -34,7 +35,8 @@ loaderElement.textContent = "Подождите пожалуйста, комме
     });
 };
 
-getApiComments();
+//getApiComments();
+renderLogin();
 
 let comments = [];
 
@@ -77,11 +79,10 @@ buttonElement.addEventListener("click", () => {
   textInputElement.classList.remove('error');
 
   if ((nameInputElement.value || textInputElement.value) === '') {
-  nameInputElement.classList.add('error');
-  textInputElement.classList.add('error');
-  return;
-};
-
+      nameInputElement.classList.add('error');
+      textInputElement.classList.add('error');
+      return;
+  };
 
 loaderElement.textContent = "Комментарий добавляется...";
 buttonElement.disabled = true;
