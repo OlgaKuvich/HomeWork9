@@ -172,3 +172,17 @@ body {
     animation: rotating 2s linear infinite;
   }
   
+  .input-login {
+    width: auto;
+  }
+
+  .login-button {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .login-form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }

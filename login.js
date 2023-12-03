@@ -1,6 +1,6 @@
 import { login } from "./api.js"
 
-export const renderLogin = () => {
+export const renderLogin = ({ getApi }) => {
     const appElement = document.getElementById("app")
     const loginHtml = 
     ` <div class="comment">
@@ -24,7 +24,7 @@ export const renderLogin = () => {
         padding-top: 25px;
         font-family: Helvetica;
         color: #ffffff;
-        font-size: 24px;">Зарегистрироваться</a>
+        //font-size: 24px;">Зарегистрироваться</a>
         </div>
     </div>`
     appElement.innerHTML = loginHtml;

@@ -64,6 +64,7 @@ nameInputElement.addEventListener('input', () => {
 });
   
 buttonElement.disabled = true;
+
 textInputElement.addEventListener('input', () => {
   if ((textInputElement.value === '')||(nameInputElement.value === '')){
     buttonElement.disabled = true;
@@ -73,59 +74,9 @@ textInputElement.addEventListener('input', () => {
     return;
   }
 });
-  
-buttonElement.addEventListener("click", () => {
-  nameInputElement.classList.remove('error');
-  textInputElement.classList.remove('error');
 
-  if ((nameInputElement.value || textInputElement.value) === '') {
-      nameInputElement.classList.add('error');
-      textInputElement.classList.add('error');
-      return;
-  };
-
-loaderElement.textContent = "Комментарий добавляется...";
-buttonElement.disabled = true;
-
-postApi(textInputElement, nameInputElement).then((response) => {
-console.log(response);
-  if (response.status === 500) {
-    loaderElement.textContent = ""; 
-    throw new Error("Ошибка сервера");
-  } 
-    if (response.status === 400) {
-      loaderElement.textContent = ""; 
-      throw new Error("Неверный запрос");
-    }
-    return response.json();
-  })
-  .then((responseData) => {
-    nameInputElement.value = '';
-    textInputElement.value = '';
-    buttonElement.disabled = true;
-    return getApiComments();
-  })
-  .catch((error) => {
-    if (error.message === "Ошибка сервера") {
-      alert("Сервер сломался, попробуй позже");
-    }
-
-      if (error.message === "Неверный запрос") {
-        alert("Имя и комментарий должны быть не короче 3-х символов");
-      } 
-      
-      if (error.message === "Failed to fetch") {
-        loaderElement.textContent = "";
-          alert("Кажется, у вас сломался интернет, попробуйте позже");
-          console.warn(error);
-        } 
-      })   
-    .finally(() => {
-        buttonElement.disabled = false;
-    })
-  });
  
-renderForm(comments,listElement);
+renderForm(comments,listElement, getApi);
 answerUserComment(comments);
 
 console.log("It works!");
