@@ -1,6 +1,8 @@
-import { login } from "./api.js"
+import { login, setToken } from "./api.js"
+import { getApiComments } from "./main.js";
+import { setUserName } from "./api.js";
 
-export const renderLogin = ({ getApi }) => {
+export const renderLogin = () => {
     const appElement = document.getElementById("app")
     const loginHtml = 
     ` <div class="comment">
@@ -18,12 +20,12 @@ export const renderLogin = ({ getApi }) => {
         <div class="login-button">
         <button class="add-form-button" id="login-button">Войти</button>
         <a href="#" id="registration" style ="display: flex;
-        align-items: center;
-        flex-direction: row;
-        justify-content: center;
-        padding-top: 25px;
-        font-family: Helvetica;
-        color: #ffffff;
+        //align-items: center;
+       // flex-direction: row;
+       // justify-content: center;
+      //  padding-top: 25px;
+      //  font-family: Helvetica;
+       // color: #ffffff;
         //font-size: 24px;">Зарегистрироваться</a>
         </div>
     </div>`
@@ -43,7 +45,7 @@ export const renderLogin = ({ getApi }) => {
             setUserName(responseData.user.name);
             })
             .then(() => {
-            getApi();
+              getApiComments();
             })
       })
     }

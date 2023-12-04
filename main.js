@@ -1,7 +1,6 @@
 import { getApi } from "./api.js";
-import { postApi } from "./api.js"; 
-import { renderForm } from "./render.js";
-import { renderLogin } from "./login.js";
+import { renderList } from "./render.js";
+
 
 const buttonElement = document.getElementById("add-button");
 const listElement = document.getElementById("list");
@@ -10,37 +9,32 @@ const textInputElement = document.getElementById("text-input");
 const loaderElement = document.getElementById("loading");
 const commentElements = document.querySelectorAll(".comment");
 
+export let comments = [];
 
-loaderElement.textContent = "Подождите пожалуйста, комментарии загружаются...";
-
-  const getApiComments = () => {
+export const getApiComments = () => {
  
-  getApi()
-        .then((responseData) => {
-            const commentsArr = responseData.comments.map((comment) => {
-            return {
-                name: comment.author.name,
-                date: new Date(comment.date).toLocaleString(),
-                text: comment.text,
-                like: 0,
-                isLike: comment.like,
-            };
-            });
-            comments = commentsArr;
-            renderForm(comments,listElement)
-        })
-    .then((response) => {
-      loaderElement.textContent = "";
-      loaderElement.classList.remove("margin");
-    });
+getApi()
+  .then((responseData) => {
+      const commentsArr = responseData.comments.map((comment) => {
+        return {
+          name: comment.author.name,
+          date: new Date(comment.date).toLocaleString(),
+          text: comment.text,
+          like: 0,
+          isLike: comment.like,
+        };
+      });
+      comments = commentsArr;
+      renderList(comments,listElement)
+  });
 };
 
-//getApiComments();
-renderLogin();
+getApiComments();
+//renderLogin();
 
-let comments = [];
 
-const answerUserComment = ({ comments }) => {
+
+/*const answerUserComment = ({ comments }) => {
   const userComments = document.querySelectorAll('.comment');
   for (const userComment of userComments) {
       userComment.addEventListener("click", () => {
@@ -75,8 +69,7 @@ textInputElement.addEventListener('input', () => {
   }
 });
 
- 
-renderForm(comments,listElement, getApi);
+renderList(comments,listElement, getApi);
 answerUserComment(comments);
 
-console.log("It works!");
+console.log("It works!");*/

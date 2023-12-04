@@ -168,7 +168,7 @@ body {
     }
   }
 
-  .-loading-like {
+  .like-button.loading-like {
     animation: rotating 2s linear infinite;
   }
   

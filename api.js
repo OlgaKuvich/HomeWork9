@@ -6,6 +6,11 @@ export const setToken = (newToken) => {
   token = newToken;
 }
 
+export let userName;
+export const setUserName = (newName) => {
+  userName = newName;
+}
+
 export const getApi = () => {
   return fetch(host, {
   method: "GET",
@@ -18,7 +23,7 @@ export const getApi = () => {
         throw new Error("Неполадки с сервером");
     }
      // document.querySelector('.loading').style.display = "none";
-      document.querySelector('.add-form').style.display = "flex";
+     // document.querySelector('.add-form').style.display = "flex";
     return response.json();
   })
 };
