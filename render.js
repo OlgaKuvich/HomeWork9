@@ -129,8 +129,8 @@ export const renderList = () => {
 
 //initLikeButtons(renderList);
 
-      //document.querySelector('.loading').style.display = "none";
-      //document.querySelector('.add-form').style.display = "flex";   
+//document.querySelector('.loading').style.display = "none";
+//document.querySelector('.add-form').style.display = "flex";   
 
 const delay = (interval = 300) => {
   return new Promise((resolve) => {
