@@ -8,7 +8,7 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding-top: 80px;
+    padding-top: 24px;
     padding-bottom: 200px;
     background: #202020;
     min-height: 100vh;
@@ -124,6 +124,7 @@ body {
     justify-content: flex-end;
   }
 
+  .login,
   .add-form-button {
     margin-top: 24px;
     font-size: 24px;
@@ -142,11 +143,10 @@ body {
 		pointer-events: none;
 	}
 
-
-  /*.loading {
+  .loading {
     text-align: center;
     display: none;
-  }*/
+  }
 
   .add-form-loading {
     text-align: center;
@@ -154,24 +154,29 @@ body {
   }
 
   @keyframes rotating {
-    from {
-      transform: rotate(0deg);
-    }
-    25% {
-      transform: rotate(30deg);;
-    }
-    75% {
-      transform: rotate(-30deg);;
-    }
-    to {
-      transform: rotate(0deg);
-    }
+		from {
+			transform: rotate(0deg);
+		}
+		25% {
+			transform: rotate(30deg);
+		}
+		75% {
+			transform: rotate(-30deg);
+		}
+		to {
+			transform: rotate(0deg);
+		}
+	}
+
+	.like-button.loading-like {
+		animation: rotating 2s linear infinite;
+	}
+
+  .loader {
+    text-align: center;
+    display: none;
   }
 
-  .like-button.loading-like {
-    animation: rotating 2s linear infinite;
-  }
-  
   .input-login {
     width: auto;
   }
@@ -185,4 +190,15 @@ body {
     display: flex;
     flex-direction: column;
     gap: 10px;
+  }
+
+  .login {
+    margin-top: 24px;
+    font-size: 20px;
+    color: #1d1b1b;
+    padding: 10px 20px;
+    background-color: #bcec30;
+    border: none;
+    border-radius: 18px;
+    cursor: pointer;
   }

@@ -7,8 +7,8 @@ export const setToken = (newToken) => {
 }
 
 export let userName;
-export const setUserName = (newName) => {
-  userName = newName;
+export const setUserName = (newUserName) => {
+  userName = newUserName;
 }
 
 export const getApi = () => {
@@ -22,8 +22,6 @@ export const getApi = () => {
     if (response.status === 500) {
         throw new Error("Неполадки с сервером");
     }
-     // document.querySelector('.loading').style.display = "none";
-     // document.querySelector('.add-form').style.display = "flex";
     return response.json();
   })
 };

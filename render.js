@@ -1,12 +1,8 @@
 import { postApi, token } from "./api.js"; 
 import { renderLogin } from "./login.js";
-import { getApiComments } from "./main.js";
+import { comments, getApiComments } from "./main.js";
 
-const listElement = document.getElementById("list");
-const commentElements = document.querySelectorAll(".comment");
-
-
-export const renderList = (comments, state) => {
+export const renderList = () => {
   const appElement = document.getElementById("app")
 
     const formHTML = `
@@ -29,7 +25,7 @@ export const renderList = (comments, state) => {
       <div class="add-form-row">
         <button id = "add-button" class="add-form-button">Написать</button>
       </div>
-      </div>`
+     </div>`
 
     const loginBtn = `<p class = "login">Пожалуйста авторизуйтесь</p>`  
 
@@ -127,47 +123,47 @@ export const renderList = (comments, state) => {
           })
         });
     }
-
     actionLogin();
-    actionForm();
+    actionForm(); 
+};
 
+//initLikeButtons(renderList);
+
+//document.querySelector('.loading').style.display = "none";
+//document.querySelector('.add-form').style.display = "flex";   
+
+const delay = (interval = 300) => {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      resolve();
+    }, interval);
+  })
 }
-     // renderComments();
-//initLikeButtons(comments, renderComments);
-          
-
-//const listElement = document.getElementById("list");
-//const commentElements = document.querySelectorAll(".comment");
-
-function delay(interval = 300) {
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        resolve();
-      }, interval);
-    });
-}
-     
+   
 export const initLikeButtons = () => {
   const likeButtons = document.querySelectorAll('.like-button');
   for (const likeButton of likeButtons) {
     likeButton.addEventListener('click', (event) => {
-        console.log(event);
         event.stopPropagation();
         likeButton.classList.add("loading-like");
             delay(2000)
-                .then(() => {
-                    likeButton.classList.remove("loading-like");
-                    const index = likeButton.dataset.index;
-                    if (comments[index].isLike) {
-                        comments[index].isLike = false;
-                        comments[index].like -= 1;
-                    } else {
-                        comments[index].isLike = true;
-                        comments[index].like += 1;
-                    }
-            renderList();
-            //initLikeButtons();
-            });
-        });
-  };
-} 
+              .then(() => {
+                  likeButton.classList.remove("loading-like");
+                  const index = likeButton.dataset.index;
+                  if (comments[index].isLiked === false) {
+                    comments[index].paint = '-active-like';
+                    comments[index].likes += 1;
+                    comments[index].isLiked = true;
+                  } else {
+                    comments[index].paint = '';
+                    comments[index].likes -= 1;
+                    comments[index].isLiked = false;
+                  }
+              renderList();
+             initLikeButtons();
+            })
+          });
+        };
+        renderList();
+        initLikeButtons();
+}
