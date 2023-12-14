@@ -1,13 +1,9 @@
 import { getApi } from "./api.js";
 import { renderList } from "./render.js";
+import { format } from "date-fns";
 
-
-const buttonElement = document.getElementById("add-button");
 const listElement = document.getElementById("list");
-const nameInputElement = document.getElementById("name-input");
 const textInputElement = document.getElementById("text-input");
-const loaderElement = document.getElementById("loading");
-const commentElements = document.querySelectorAll(".comment");
 
 export let comments = [];
 
@@ -18,7 +14,7 @@ getApi()
       const commentsArr = responseData.comments.map((comment) => {
         return {
           name: comment.author.name,
-          date: new Date(comment.date).toLocaleString(),
+          date: format(new Date(comment.date), "yyyy-MM-dd hh.mm.ss"),
           text: comment.text,
           like: 0,
           isLike: comment.like,
@@ -28,13 +24,9 @@ getApi()
       renderList(comments,listElement)
   });
 };
-
 getApiComments();
-//renderLogin();
 
-
-
-/*const answerUserComment = ({ comments }) => {
+const answerUserComment = () => {
   const userComments = document.querySelectorAll('.comment');
   for (const userComment of userComments) {
       userComment.addEventListener("click", () => {
@@ -44,32 +36,4 @@ getApiComments();
       });
   };
 }
-
- 
-buttonElement.disabled = true;
-nameInputElement.addEventListener('input', () => {
-  if ((nameInputElement.value === '')||(textInputElement.value === '')){
-    buttonElement.disabled = true;
-    return;
-  } else {
-    buttonElement.disabled = false;
-    return;
-  }
-});
-  
-buttonElement.disabled = true;
-
-textInputElement.addEventListener('input', () => {
-  if ((textInputElement.value === '')||(nameInputElement.value === '')){
-    buttonElement.disabled = true;
-    return;
-  } else {
-    buttonElement.disabled = false;
-    return;
-  }
-});
-
-renderList(comments,listElement, getApi);
-answerUserComment(comments);
-
-console.log("It works!");*/
+answerUserComment();
