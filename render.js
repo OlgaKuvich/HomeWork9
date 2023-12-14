@@ -2,6 +2,7 @@ import { postApi, token } from "./api.js";
 import { renderLogin } from "./login.js";
 import { comments, getApiComments } from "./main.js";
 
+
 export const renderList = () => {
   const appElement = document.getElementById("app")
 

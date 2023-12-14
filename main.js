@@ -1,5 +1,6 @@
 import { getApi } from "./api.js";
 import { renderList } from "./render.js";
+import { format } from "date-fns";
 
 const listElement = document.getElementById("list");
 const textInputElement = document.getElementById("text-input");
@@ -13,7 +14,7 @@ getApi()
       const commentsArr = responseData.comments.map((comment) => {
         return {
           name: comment.author.name,
-          date: new Date(comment.date).toLocaleString(),
+          date: format(new Date(comment.date), "yyyy-MM-dd hh.mm.ss"),
           text: comment.text,
           like: 0,
           isLike: comment.like,
